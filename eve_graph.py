@@ -34,7 +34,7 @@ LY =  9460730472580800
 LYk = LY/1000
 
 class GetOutOfLoop( Exception ):
-    pass
+	pass
 
 def load_graph():
 	'''
@@ -69,20 +69,20 @@ def load_graph():
 					print('Exception: {}'.format(e))
 					print('Sleeping for 5 seconds before retry')
 					sleep(5)
-	#                 raise GetOutOfLoop
-				if G.has_node(u):                
+	#				 raise GetOutOfLoop
+				if G.has_node(u):				
 					if G.has_edge(u,v):
 						print('.',end='')
 						continue
 					else:
-	#                     print('\nAdding edge {}:{}'.format(u,v))
+	#					 print('\nAdding edge {}:{}'.format(u,v))
 						print('-',end='')
 				else:
 					print('+',end='')
-	#                 print('\nAdding system {}'.format(u))
+	#				 print('\nAdding system {}'.format(u))
 				try:
 					print('+',end='')
-	#                 print('\tAdding edge to {} via {}'.format(v,x))
+	#				 print('\tAdding edge to {} via {}'.format(v,x))
 					G.add_edge(tmp.json()['system_id'],v)
 				except AttributeError as e:
 					print(str(e))
@@ -109,14 +109,14 @@ def getSystemInfo(sys_id):
 
 	This function should only be called by the getSystemPosition function
 	'''
-    return r.get(query_base + 'universe/systems/' + str(sys_id))
+	return r.get(query_base + 'universe/systems/' + str(sys_id))
 
 def getSystemPosition(sys_id):
 	'''
 	Returns a tuple of the x,y,z coordinates for a system position
 	obtained from the system information result object
 	'''
-    return tuple(getSystemInfo(sys_id).json()['position'].values())
+	return tuple(getSystemInfo(sys_id).json()['position'].values())
 
 def addAllEdgeWeights():
 	'''
@@ -139,10 +139,10 @@ def calcDistance(p1,p2):
 	Calculated the distance between two points and returns the
 	results with a kilometer unit base
 	'''
-    x1,y1,z1 = p1
-    x2,y2,z2 = p2
-    
-    return(math.sqrt(((x1-x2)**2) + ((y1-y2)**2) + ((z1-z2)**2))/1000)
+	x1,y1,z1 = p1
+	x2,y2,z2 = p2
+	
+	return(math.sqrt(((x1-x2)**2) + ((y1-y2)**2) + ((z1-z2)**2))/1000)
 
 '''
 If you are not using this as a module, remove/comment the next section
