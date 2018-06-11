@@ -18,6 +18,7 @@ from time import sleep
 import sys
 import requests as r
 import networkx
+from eve_primary import *
 '''
 processed_systesm stores systems that have been added to the graph and all edges identified
 Useful if this process must be restarted, but additional handling must be added if running
@@ -120,8 +121,8 @@ def getSystemPosition(sys_id):
 
 def addAllEdgeWeights():
 	'''
-	Iterates over all_systems list and adds edge weights to 
-	the edges in the graph using the distance calculations
+	Iterates over all edges in the graph and 
+	adds edge weights using the distance calculations
 	in LYk as the measure
 	'''
 	global G
