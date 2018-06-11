@@ -15,7 +15,7 @@ __email__ = "avenhor@gmail.com"
 __status__ = "Development"
 
 from time import sleep
-import sys
+import sys, os.path
 import requests as r
 import networkx
 from eve_primary import *
@@ -29,10 +29,23 @@ If using this code as a module, declare the list locally and implement a system 
 it while loading the graph. Pickling is a good idea in this case
 '''
 processed_systems = [] # need to handle this per above note
+edges_added = [] # also need to protect this list
 G = nx.Graph() # Graph object
 AU = 149597900
 LY =  9460730472580800
 LYk = LY/1000
+graph_data = {}
+
+if os.path.isfile('graph.pkl'):
+	try:
+		with open('graph.pkl','rb') as f:
+			graph_data = pickle.load(f)
+
+		processed_systems = graph_data['processed']
+		G = graph_data['graph']
+		edged_added = graph_data['edges']
+	except Exception as e:
+		print('Caught exception loading graph data from pickled file => {}'.format(e))
 
 class GetOutOfLoop( Exception ):
 	pass
@@ -121,18 +134,23 @@ def getSystemPosition(sys_id):
 
 def addAllEdgeWeights():
 	'''
-	Iterates over all edges in the graph and 
+	Iterates over all edges in the graph and
 	adds edge weights using the distance calculations
 	in LYk as the measure
 	'''
 	global G
 
 	for e in list(G.edges()):
+		if e in edges_added:
+			print('@',end='')
+			continue
 		try:
 			distance = calcDistance(getSystemPosition(e[0]),getSystemPosition(e[1]))/LYk
 			G.add_edge(e[0],e[1],weight = distance)
-		except:
-			print('Caught exception {}.\nRetrying in 5 seconds'.format(_))
+			edges_added.append(e)
+			print('.',end='')
+		except Exception as e:
+			print('Caught exception {}.\nRetrying in 5 seconds'.format(e))
 			sleep(5)
 
 def calcDistance(p1,p2):
