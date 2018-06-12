@@ -1,5 +1,5 @@
 # Ignore vim swap files
-.swp
+*.swp
 
 # Ignore module cache files
 __pycache__/
